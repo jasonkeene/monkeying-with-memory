@@ -13,5 +13,11 @@ loop: loop.o
 loop.o:
 	nasm -felf64 loop.s
 
+docker-run: docker-build
+	docker run -it --rm -v "$(PWD)":/pwd monkey-env
+
+docker-build:
+	docker build -t monkey-env .
+
 clean:
-	rm -f hello.o hello loop.o loop
+	rm -f hello.o hello loop.o loop && docker rmi -f monkey-env
