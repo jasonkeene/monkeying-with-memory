@@ -1,26 +1,38 @@
-		global	_start
+global _start
 
-		section	.text
-_start:		xor	rax, rax
-		mov	rcx, 33
+section .text
 
-loop:
-		inc	rax
-		loop	loop
+_start:
+    xor     rax, rax        ; zero out rax
+    mov     rcx, 33         ; how many times to increment
+    call    inc
+    call    print
+    call    exit
 
-		mov	rsi, message
-		mov	[rsi], rax
-		mov	rcx, 10
-		mov	[rsi+1], rcx
+inc:                        ; loop incrementing rax, rcx times
+    inc     rax
+    loop    inc
+    ret
 
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rdx, 2
-		syscall
+print:                      ; print the value of rax
+    mov     rsi, message
+    mov     [rsi], rax
+    mov     rcx, 10         ; add newline character
+    mov     [rsi+1], rcx
 
-		mov 	rax, 60		; exit with 0
-		xor	rdi, rdi
-		syscall
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rdx, 2
+    syscall
+    ret
 
-		section	.data
-message:	db	0, 0
+exit:                       ; exit with 0
+    mov     rax, 60
+    xor     rdi, rdi
+    syscall
+    ret
+
+section .data
+
+message:
+    db      0, 0            ; storage for output
